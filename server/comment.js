@@ -1,5 +1,5 @@
 const Comment = require("../model/Comment");
-const {insert, querySql, deleteOne, queryOne} = require('../db/index')
+const {insert, querySql} = require('../db/index')
 
  function pushComment(comment) {
     return new Promise(async (resolve, reject) => {

@@ -10,5 +10,5 @@ module.exports = {
   PRIVATE_KEY: 'liulili_blog_admin_key',
   JWT_EXPIRES: 60 * 60,
   UPLOAD_PATH: env==='env'?'/Users/liulili/upload/myblog':'/root/upload/myblog',
-  UPLOAD_URL: env==='env'?'http://localhost:8089/myblog':'http://www.sosoleona.xyz/book/res/img'
+  UPLOAD_URL: env==='env'?'http://localhost:8089/myblog':'http://120.79.24.96/myblog'
 }

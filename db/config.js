@@ -4,7 +4,7 @@ let user
 let password
 let database
 let charset = 'utf8mb4'
-if(env === 'env'){
+if(env === 'dev'){
   host= 'localhost'
   user= 'root'
   password= '20180113lg'

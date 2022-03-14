@@ -29,8 +29,12 @@ function getClientIp(req) {
   req.socket.remoteAddress ||
   req.connection.socket.remoteAddress;
 };
+function isObject(o) {
+  return Object.prototype.toString.call(o) === '[object Object]'
+}
 module.exports = {
   md5,
   decode,
-  getClientIp
+  getClientIp,
+  isObject
 }

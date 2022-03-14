@@ -1,6 +1,7 @@
 const mysql  = require('mysql');
 const { host, user, password, database } = require('./config');
 const {debug} = require('../utils/constant')
+const { isObject} = require('../utils')
 
 function connect() {
   return  mysql.createConnection({
@@ -73,6 +74,42 @@ function insert(model, tableName) {
       }
   })
 }
+function update(model, tableName) {
+  const conn = new connect()
+   return new Promise((resolve, reject) => {
+       try {
+           if(!isObject(model)) {
+               reject(new Error('传入的参数不合法'))
+           }else {
+               const id = model.id
+               if(!id) {
+                   reject(new Error('id 不能为空'))
+               }
+               let sql = `update ${tableName} set `
+               let params = []
+               Object.keys(model).forEach(key => {
+                   if(model[key]) {
+                       params.push(`\`${key}\` = '${model[key]}'`)
+                   }
+               })
+               sql = `${sql}${params.join(',')} where id = ${id}`
+               debug && console.log(sql);
+               conn.query(sql, (err, result) => {
+                   if(err) {
+                       reject(err)
+                   }else {
+                       resolve(result)
+                   }
+               })
+   
+           }
+       } catch (error) {
+           reject(error)
+       } finally {
+           conn.end()
+       }
+   })
+}
 function querySql(sql) {
   let conn = connect();
   return new Promise((resolve, reject) => {
@@ -121,5 +158,6 @@ module.exports = {
   querySql,
   deleteOne,
   andSql,
-  likeSql
+  likeSql,
+  update
 }

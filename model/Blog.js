@@ -8,11 +8,13 @@ class Blog {
   }
   toBlog() {
     return {
+      id: this.id,
       title: this.title,
       categoryId: Number(this.categoryId),
       content: this.content,
-      createDate: new Date().getTime(),
-      createUser: this.createUser
+      createDate: this.id?'':new Date().getTime(),
+      createUser: this.id?'':this.createUser,
+      updateDate: this.id?new Date().getTime():''
     }
   }
 }

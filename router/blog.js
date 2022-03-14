@@ -7,7 +7,7 @@ const router = express.Router()
 const multer = require('multer')
 const Result = require('../utils/model/result')
 const Blog = require('../model/Blog')
-const {saveBlog, getList, deleteBlog, getDetail, getCatetory, getHotList, updateBlogEval, getBlogEvalInfo, getCategoryList} = require('../server/blog')
+const {saveBlog, getList,editBlog, deleteBlog, getDetail, getCatetory, getHotList, updateBlogEval, getBlogEvalInfo, getCategoryList} = require('../server/blog')
 const { decode } = require('../utils/index')
 
 // 思路
@@ -46,7 +46,6 @@ router.post('/upload',upload.single('image'), function(req, res, next) {
   }
 })
 router.post('/saveData',[body('title').isString().withMessage('title类型不正确')], (req, res, next) => {
-
 const err = validationResult(req)
 if(err.isEmpty()) {
   const {msg} = err
@@ -57,13 +56,34 @@ if(err.isEmpty()) {
   const {title, content, category} = JSON.parse(req.body.param)
   let blog = new Blog(title, category, content)
   blog.createUser = username
-  console.log('blog:',blog);
   saveBlog(blog).then(data => {
    return new Result('新增成功').success(res)
   }).catch(err=>{
     next(boom.badRequest(err))
   })
 }
+})
+router.post('/editBlog',[body('title').isString().withMessage('title类型不正确')], (req, res, next) => {
+  const err = validationResult(req)
+  if(err.isEmpty()) {
+    const {msg} = err
+    next(boom.badRequest(msg))
+  }else {
+    const {id, title, content, category} = JSON.parse(req.body.param)
+   
+    if (!id) {
+     return next(boom.badRequest('参数有误'))
+    }
+    let blog = new Blog(title, category, content)
+    blog.updateDate = new Date().getTime()
+    blog.id = id
+    editBlog(blog).then(data => {
+     return new Result('编辑成功').success(res)
+    }).catch(err=>{
+      next(boom.badRequest(err))
+    })
+  }
+
 })
 
 router.get('/getList',(req, res, next) => {

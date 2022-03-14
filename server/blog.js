@@ -1,5 +1,5 @@
 const Blog = require("../model/Blog");
-const {insert, querySql, queryOne, andSql, likeSql} = require('../db/index')
+const {insert, update, querySql, queryOne, andSql, likeSql} = require('../db/index')
 
  function saveBlog (blog) {
     return new Promise(async (resolve, reject) => {
@@ -15,10 +15,24 @@ const {insert, querySql, queryOne, andSql, likeSql} = require('../db/index')
       }
     })
 }
+function editBlog (blog) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if(blog instanceof Blog) {
+      const result = await update(blog.toBlog(), 'blog')
+      resolve(result)
+      } else {
+        reject(new reject('修改失败'))
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
 function getList(categoryId,key,page,size) {
   return new Promise(async (resolve, reject) => {
     try {
-      let sql = 'select b.id,b.title,b.content,b.categoryId,b.createDate,b.createUser,COUNT(c.blogId) as commentNum,'
+      let sql = 'select b.id,b.title,b.content,b.categoryId,b.createDate,b.createUser,b.updateDate,COUNT(c.blogId) as commentNum,'
        + 'g.categoryText from blog as b LEFT JOIN blog_comment AS c ON b.id = c.blogId LEFT JOIN blog_category as g ON b.categoryId = g.category'
       let where = 'where'
       categoryId && (where = andSql(where,'categoryId',categoryId, 'b'))
@@ -146,6 +160,7 @@ function getCategoryList(){
 }
 module.exports = {
   saveBlog,
+  editBlog,
   getList,
   deleteBlog,
   getDetail,

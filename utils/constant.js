@@ -9,6 +9,6 @@ module.exports = {
   debug: false,
   PRIVATE_KEY: 'liulili_blog_admin_key',
   JWT_EXPIRES: 60 * 60,
-  UPLOAD_PATH: UPLOAD_PATH,
-  UPLOAD_URL: UPLOAD_URL
+  UPLOAD_PATH: '/root/upload/myblog',
+  UPLOAD_URL: 'http://120.79.24.96/myblog'
 }
